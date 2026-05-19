@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Options -Indexes
 
 RewriteEngine On
@@ -7,3 +8,11 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 
 RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
+=======
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
+>>>>>>> e8b64ebba3b781b1e691717094efbdd49d2b67a1
