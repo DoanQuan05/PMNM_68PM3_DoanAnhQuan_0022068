@@ -1,17 +1,21 @@
 <?php
 require_once '../app/core/App.php';
 session_start();
-
-class Middleware {
+    class middleware {
     function checklogin() {
-        $currentUrl = isset($_GET['url']) ? trim($_GET['url'], '/') : 'home/index';
-
-        $publicPages = ['home/login'];
-
-        if (!isset($_SESSION['username']) && !in_array($currentUrl, $publicPages)) { 
-            header('Location: /QLSinhVien/public/home/login');
+        $publicPages = ['/home/login', '/auth/login', 'home/login', 'auth/login'];
+        $currentUri = trim($_SERVER['REQUEST_URI'], '/');
+        $isPublic = false;
+        foreach ($publicPages as $page) {
+            if (strpos($currentUri, trim($page, '/')) !== false) {
+                $isPublic = true;
+                break;
+            }
+        }
+        if (!isset($_SESSION['username']) && !$isPublic) {
+            header('Location: /home/login');
             exit();
         }
-    }   
-}
+    }
+    }
 ?>
