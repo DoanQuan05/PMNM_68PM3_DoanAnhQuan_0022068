@@ -24,22 +24,22 @@
                 return false;
             }
         }
-        public function paging($limit = 5, $offset = 0, search =""){
-            $query = "SELECT * FROM tbl_sinhviens LIMIT :limit OFFSET :offset";
-            $stmt = $this -> conn -> prepare($query);
-            $stmt -> bindParam(':limit', $limit);
-            $stmt -> bindParam(':offset', $offset);
-            $stmt -> execute(); 
-            //$result = $stmt->get_result();
+        public function paging($limit = 5, $offset = 0, $search = "") {
+            $limit = (int)$limit;
+            $offset = (int)$offset;
+            $query = "SELECT * FROM sinhvien LIMIT :limit OFFSET :offset";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            //tính tổng số bản ghi
-            $selectAllQuery = $this->conn->prepare("SELECT COUNT(*) FROM tbl_sinhviens");
-            $totalRecord = $selectAllQuery->fetch_column();
-
+            $selectAllQuery = $this->conn->prepare("SELECT COUNT(*) FROM sinhvien");
+            $selectAllQuery->execute();
+            $totalRecord = $selectAllQuery->fetchColumn();
             $totalPage = ceil($totalRecord / $limit);
-            
-            return ["sinhviens"=>$result, "totalpage"=>$totalPage];
+
+            return ["sinhvien" => $result, "totalPage" => $totalPage];
         }
     }
     
