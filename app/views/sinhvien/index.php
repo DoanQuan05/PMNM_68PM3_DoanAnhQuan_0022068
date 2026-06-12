@@ -1,67 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang Sinh Viên</title>
-</head>
-<body>
-    <h1>Danh sách sinh viên</h1>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .btn {
-            display: inline-block;
-            padding: 8px 16px;
-            margin: 4px;
-            text-decoration: none;
-            color: white;
-            background-color: #007bff;
-            border-radius: 4px;
-  }
-    </style>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>MSSV</th>
-                <th>Họ tên</th>
-                <th>Giới tính</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach($sinhvien as $sv): ?>
+<style>
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 10px 14px; text-align: left; }
+    th { background-color: #f2f2f2; font-weight: 600; }
+    tr:hover { background-color: #f9f9f9; }
+    .btn { display: inline-block; padding: 6px 14px; text-decoration: none; color: white; background-color: #007bff; border-radius: 4px; font-size: 13px; }
+    .btn-success { background-color: #28a745; }
+    .btn-warning { background-color: #ffc107; color: #212529; }
+    .btn-danger { background-color: #dc3545; }
+    .pagination { margin-top: 16px; display: flex; gap: 6px; }
+</style>
+
+<h2>Danh sách sinh viên</h2>
+<a href="/sinhvien/create" class="btn btn-success" style="margin-bottom:14px;display:inline-block">+ Thêm mới</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>MSSV</th>
+            <th>Họ tên</th>
+            <th>Giới tính</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($sinhvien)): ?>
+            <?php foreach ($sinhvien as $i => $sv): ?>
                 <tr>
-                    <td><?php echo $sv['id']; ?></td>
-                    <td><?php echo $sv['MSSV']; ?></td>
-                    <td><?php echo $sv['HoTen']; ?></td>
-                    <td><?php echo $sv['GioiTinh']; ?></td>
-                    <td> 
-                        <a href = "/sinhvien/edit/<?php echo $sv['id']; ?>">Sửa</a>
-                        <a href = "/sinhvien/delete/<?php echo $sv['id']; ?>">Xoá</a>
+                    <td><?php echo $i + 1; ?></td>
+                    <td><?php echo htmlspecialchars($sv['MSSV']); ?></td>
+                    <td><?php echo htmlspecialchars($sv['HoTen']); ?></td>
+                    <td><?php echo htmlspecialchars($sv['GioiTinh']); ?></td>
+                    <td>
+                        <a href="/sinhvien/edit/<?php echo $sv['id']; ?>" class="btn btn-warning">Sửa</a>
+                        <a href="/sinhvien/delete/<?php echo $sv['id']; ?>" class="btn btn-danger" onclick="return confirm('Xóa sinh viên này?')">Xóa</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
-        </tbody>
-    </table>
-    <div>
-        <?php
-            $pageSize = 5;
-            for($i =1; $i <= $totalPage; $i++){
+        <?php else: ?>
+            <tr><td colspan="5" style="text-align:center">Không có dữ liệu</td></tr>
+        <?php endif; ?>
+    </tbody>
+</table>
+
+<div class="pagination">
+    <?php
+        $pageSize = 5;
+        for ($i = 1; $i <= $totalPage; $i++) {
             $offset = ($i - 1) * $pageSize;
-            echo "<a class='btn btn-primary' href = '/sinhvien/index/$pageSize/$offset'> $i </a>";
-            }
-        ?>
-    </div>
-</body>
-</html>
+            echo "<a class='btn' href='/sinhvien/index/$pageSize/$offset'>$i</a>";
+        }
+    ?>
+</div>
