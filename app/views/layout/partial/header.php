@@ -32,6 +32,7 @@
     <nav>
         <a href="/home/index">Trang chủ</a>
         <a href="/sinhvien/index">Sinh viên</a>
+        <a href="/lophoc/index">Lớp học</a>
         <a href="/home/logout">Đăng xuất</a>
     </nav>
 </div>
