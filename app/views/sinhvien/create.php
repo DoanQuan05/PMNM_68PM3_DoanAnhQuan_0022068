@@ -1,100 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm sinh viên</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #2c3e50;
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-        input[type="text"], select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        input[type="submit"], .btn-back {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
-        input[type="submit"]:hover {
-            background-color: #218838;
-        }
-        .btn-back {
-            display: block;
-            background-color: #6c757d;
-            text-align: center;
-            text-decoration: none;
-            box-sizing: border-box;
-        }
-        .btn-back:hover {
-            background-color: #5a6268;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Thêm sinh viên</h1>
-        <form action="/sinhvien/store" method="POST">
-            <div class="form-group">
-                <label for="MSSV">MSSV:</label>
-                <input type="text" id="MSSV" name="MSSV" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="HoTen">Họ tên:</label>
-                <input type="text" id="HoTen" name="HoTen" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="GioiTinh">Giới tính:</label>
-                <select id="GioiTinh" name="GioiTinh" required>
-                    <option value="">Chọn giới tính</option>
-                    <option value="Nam">Nam</option>
-                    <option value="Nữ">Nữ</option>
-                    <option value="Khác">Khác</option>
-                </select>
-            </div>
+<style>
+    .form-card { background: white; border-radius: 10px; padding: 30px; max-width: 500px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+    .form-card h3 { color: white; background: #28a745; padding: 14px 20px; border-radius: 6px; margin: -30px -30px 24px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: #4a5568; }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; outline: none; }
+    .form-group input:focus, .form-group select:focus { border-color: #28a745; box-shadow: 0 0 0 3px rgba(40,167,69,0.15); }
+    .btn { display: inline-block; padding: 10px 20px; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+    .btn-success { background: #28a745; }
+    .btn-secondary { background: #6c757d; margin-left: 8px; }
+</style>
 
-            <input type="submit" value="Thêm sinh viên">
-            <a href="/sinhvien/index" class="btn-back">Quay lại danh sách</a>
-        </form>
-    </div>
-</body>
-</html>
+<div class="form-card">
+    <h3>Thêm sinh viên mới</h3>
+    <form action="/sinhvien/store" method="POST">
+        <div class="form-group">
+            <label>MSSV</label>
+            <input type="text" name="MSSV" placeholder="Mã số sinh viên" required>
+        </div>
+        <div class="form-group">
+            <label>Họ tên</label>
+            <input type="text" name="HoTen" placeholder="Họ và tên" required>
+        </div>
+        <div class="form-group">
+            <label>Giới tính</label>
+            <select name="GioiTinh" required>
+                <option value="">-- Chọn giới tính --</option>
+                <option value="Nam">Nam</option>
+                <option value="Nu">Nữ</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Lớp học</label>
+            <select name="MaLop">
+                <option value="">-- Chưa phân lớp --</option>
+                <?php foreach ($lophoc as $lop): ?>
+                    <option value="<?php echo htmlspecialchars($lop['MaLop']); ?>">
+                        <?php echo htmlspecialchars($lop['MaLop'] . ' - ' . $lop['TenLop']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Lưu sinh viên</button>
+        <a href="/sinhvien/index" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

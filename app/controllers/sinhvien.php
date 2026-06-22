@@ -1,7 +1,7 @@
-
 <?php
 require_once '../app/core/Controller.php';
 class sinhvien extends Controller {
+
     public function index($limit = 5, $offset = 0, $search = '') {
         $sinhvienModel = $this->model('sinhvienModel');
         $result = $sinhvienModel->paging($limit, $offset, $search);
@@ -11,61 +11,60 @@ class sinhvien extends Controller {
     }
 
     public function create() {
-        //trả về view 
-        require_once '../app/views/sinhvien/create.php';
+        $lophocModel = $this->model('lophocModel');
+        $lophoc = $lophocModel->getAll();
+        $this->view('sinhvien/create', ['lophoc' => $lophoc], 'Thêm sinh viên');
     }
-    public function store() {
-        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            $HoTen = $_POST['HoTen'] ?? '';
-            $GioiTinh = $_POST['GioiTinh'] ?? '';
-            $MSSV = $_POST['MSSV'] ?? '';
 
+    public function store() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $HoTen   = $_POST['HoTen'] ?? '';
+            $GioiTinh = $_POST['GioiTinh'] ?? '';
+            $MSSV    = $_POST['MSSV'] ?? '';
+            $MaLop   = $_POST['MaLop'] ?: null;
             $sinhvienModel = $this->model('sinhvienModel');
-            $result = $sinhvienModel->create($HoTen, $GioiTinh, $MSSV);
-            if ($result) {
+            if ($sinhvienModel->create($HoTen, $GioiTinh, $MSSV, $MaLop)) {
                 header('Location: /sinhvien/index');
-                exit();
             } else {
-                echo "<script>alert('Lỗi: Thêm sinh viên thất bại! Có thể MSSV đã tồn tại.'); window.history.back();</script>";
+                echo "<script>alert('Lỗi: MSSV đã tồn tại!'); window.history.back();</script>";
             }
+            exit();
         }
     }
 
     public function edit($id) {
         $sinhvienModel = $this->model('sinhvienModel');
+        $lophocModel   = $this->model('lophocModel');
         $sinhvien = $sinhvienModel->getSinhvienById($id);
+        $lophoc   = $lophocModel->getAll();
         if ($sinhvien) {
-            $this->view('sinhvien/edit', ['sinhvien' => $sinhvien], 'Sửa sinh viên');
+            $this->view('sinhvien/edit', ['sinhvien' => $sinhvien, 'lophoc' => $lophoc], 'Sửa sinh viên');
         } else {
             echo "Không tìm thấy sinh viên!";
         }
     }
 
     public function update($id) {
-        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            $HoTen = $_POST['HoTen'] ?? '';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $HoTen    = $_POST['HoTen'] ?? '';
             $GioiTinh = $_POST['GioiTinh'] ?? '';
-            $MSSV = $_POST['MSSV'] ?? '';
-
+            $MSSV     = $_POST['MSSV'] ?? '';
+            $MaLop    = $_POST['MaLop'] ?: null;
             $sinhvienModel = $this->model('sinhvienModel');
-            $result = $sinhvienModel->update($id, $HoTen, $GioiTinh, $MSSV);
-            if ($result) {
+            if ($sinhvienModel->update($id, $HoTen, $GioiTinh, $MSSV, $MaLop)) {
                 header('Location: /sinhvien/index');
-                exit();
             } else {
-                echo "<script>alert('Lỗi: Cập nhật thất bại! Có thể MSSV đã tồn tại.'); window.history.back();</script>";
+                echo "<script>alert('Lỗi cập nhật!'); window.history.back();</script>";
             }
+            exit();
         }
     }
 
     public function delete($id) {
         $sinhvienModel = $this->model('sinhvienModel');
-        $result = $sinhvienModel->delete($id);
-        if ($result) {
-            header('Location: /sinhvien/index');
-            exit();
-        } else {
-            echo "Lỗi khi xóa sinh viên!";
-        }
+        $sinhvienModel->delete($id);
+        header('Location: /sinhvien/index');
+        exit();
     }
 }
+?>

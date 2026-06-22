@@ -20,6 +20,7 @@
             <th>MSSV</th>
             <th>Họ tên</th>
             <th>Giới tính</th>
+            <th>Lớp học</th>
             <th>Thao tác</th>
         </tr>
     </thead>
@@ -32,13 +33,20 @@
                     <td><?php echo htmlspecialchars($sv['HoTen']); ?></td>
                     <td><?php echo htmlspecialchars($sv['GioiTinh']); ?></td>
                     <td>
+                        <?php if (!empty($sv['TenLop'])): ?>
+                            <span style="background:#667eea;color:white;padding:3px 10px;border-radius:12px;font-size:12px"><?php echo htmlspecialchars($sv['TenLop']); ?></span>
+                        <?php else: ?>
+                            <span style="color:#999;font-size:12px">Chưa phân lớp</span>
+                        <?php endif; ?>
+                    </td>
+                    <td>
                         <a href="/sinhvien/edit/<?php echo $sv['id']; ?>" class="btn btn-warning">Sửa</a>
                         <a href="/sinhvien/delete/<?php echo $sv['id']; ?>" class="btn btn-danger" onclick="return confirm('Xóa sinh viên này?')">Xóa</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
-            <tr><td colspan="5" style="text-align:center">Không có dữ liệu</td></tr>
+            <tr><td colspan="6" style="text-align:center">Không có dữ liệu</td></tr>
         <?php endif; ?>
     </tbody>
 </table>
